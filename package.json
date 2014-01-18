@@ -1,0 +1,14 @@
+{
+  "name": "nodeES",
+  "version": "0.0.0",
+  "description": "nodeJS scraping tool for gamelist.xml from EmulationStation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SkaveRat",
+  "license": "MIT",
+  "dependencies": {
+	  "jsdom": "*"
+  }
+}
