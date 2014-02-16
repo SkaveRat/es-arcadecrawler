@@ -1,7 +1,6 @@
 var jsdom = require("jsdom");
 var http = require('http');
 var fs = require("fs");
-var memwatch = require("memwatch");
 var jquery = fs.readFileSync("./lib/jquery.js", "utf-8");
 
 var sqlite3 = require('sqlite3').verbose();
@@ -15,10 +14,6 @@ var doneCounter = 0;
 var nameRegex = new RegExp(/<h1>(.+) \(MAME version \d\.\d+\)/);
 
 var starttime;
-
-var hd = new memwatch.HeapDiff();
-
-var foo = 0;
 
 if(!romDir)
 	throw Error("No path secified. Use path to roms as argument");
@@ -60,8 +55,6 @@ function handleFile(filename) {
 
 
 function fetchGameData(gamename) {
-
-//	db.all('SELECT id FROM arcadegames ')
 
 	http.get('http://www.mamedb.com/game/' + gamename, function (response, body) {
 		var body;
