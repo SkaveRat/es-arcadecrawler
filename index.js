@@ -99,11 +99,17 @@ function parseMamedb(err, window, gamename) {
 
 
 	var $ = window.$;
-	var nameRegex = new RegExp(/<h1>([\w\s\(\)\-',\/\.]+) \(MAME version \d\.\d+\)/);
+	var nameRegex = new RegExp(/<h1>([\w\s\(\)\-',\/\.:]+) \(MAME version \d\.\d+\)/);
 
 	var game_id = $('input[name="game_id"]').val();
 	var master_game_id = $('input[name="master_game_id"]').val();
 	var formattedName = $('body').html().match(nameRegex);
+
+	if(!formattedName[1]){
+		console.log("ERROR name not parsed: %s", gamename);
+		return;
+	}
+
 
 	db.run("INSERT INTO arcadegames (id, master_id, shortname, name) VALUES (?,?,?,?)", game_id, master_game_id, gamename, formattedName[1]);
 
