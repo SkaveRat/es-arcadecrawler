@@ -105,7 +105,7 @@ function parseMamedb(err, window, gamename) {
 	var master_game_id = $('input[name="master_game_id"]').val();
 	var formattedName = $('body').html().match(nameRegex);
 
-	if(!formattedName[1]){
+	if(!formattedName){
 		console.log("ERROR name not parsed: %s", gamename);
 		return;
 	}
