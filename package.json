@@ -10,7 +10,6 @@
   "license": "MIT",
   "dependencies": {
 	  "jsdom": "*",
-	  "sqlite3": "*",
-	  "request": "*"
+	  "sqlite3": "*"
   }
 }

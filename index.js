@@ -1,6 +1,7 @@
 var jsdom = require("jsdom");
-var request = require('request');
+var http = require('http');
 var fs = require("fs");
+var memwatch = require("memwatch");
 var jquery = fs.readFileSync("./lib/jquery.js", "utf-8");
 
 var sqlite3 = require('sqlite3').verbose();
@@ -15,6 +16,9 @@ var nameRegex = new RegExp(/<h1>(.+) \(MAME version \d\.\d+\)/);
 
 var starttime;
 
+var hd = new memwatch.HeapDiff();
+
+var foo = 0;
 
 if(!romDir)
 	throw Error("No path secified. Use path to roms as argument");
@@ -56,19 +60,33 @@ function handleFile(filename) {
 
 
 function fetchGameData(gamename) {
-	request('http://www.mamedb.com/game/' + gamename, function (err, response, body) {
-		if (!err && response.statusCode == 200) {
-			jsdom.env(
-				{
-					html: body,
-					src: [jquery],
-					done: function(err, window) {parseMamedb(err, window, gamename)}
-				}
-			);
+
+//	db.all('SELECT id FROM arcadegames ')
+
+	http.get('http://www.mamedb.com/game/' + gamename, function (response, body) {
+		var body;
+		if (response.statusCode == 200) {
+
+			response.on('data', function(data){
+				body += data.toString();
+			});
+
+			response.on('end', function(){
+				jsdom.env(
+					{
+						html: body,
+						src: [jquery],
+						done: function(err, window) {parseMamedb(err, window, gamename)}
+					}
+				);
+
+			});
 		}else{
 			console.log("%s NOT FOUND: %s", logLine(), gamename);
 		}
-
+		doneCounter++;
+	}).on('error', function(e){
+		console.log("%s NOT FOUND: %s", logLine(), gamename);
 		doneCounter++;
 	});
 }
@@ -114,4 +132,5 @@ function parseMamedb(err, window, gamename) {
 	db.run("INSERT INTO arcadegames (id, master_id, shortname, name) VALUES (?,?,?,?)", game_id, master_game_id, gamename, formattedName[1]);
 
 	console.log('%s %s: %s/%s - %s', logLine(), gamename, game_id, master_game_id, formattedName[1]);
+	window.close();
 }
