@@ -99,7 +99,7 @@ function parseMamedb(err, window, gamename) {
 
 
 	var $ = window.$;
-	var nameRegex = new RegExp(/<h1>([\w\s\(\)\-',\/\.:\?]+) \(MAME version \d\.\d+\)/);
+	var nameRegex = new RegExp(/<h1>(.+) \(MAME version \d\.\d+\)/);
 
 	var game_id = $('input[name="game_id"]').val();
 	var master_game_id = $('input[name="master_game_id"]').val();
