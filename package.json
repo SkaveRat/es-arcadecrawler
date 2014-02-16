@@ -9,6 +9,8 @@
   "author": "SkaveRat",
   "license": "MIT",
   "dependencies": {
-	  "jsdom": "*"
+	  "jsdom": "*",
+	  "sqlite3": "*",
+	  "request": "*"
   }
 }
